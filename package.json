@@ -1,0 +1,19 @@
+{
+  "name": "softskills-resume-builder",
+  "version": "1.0.0",
+  "description": "Интерактивный конструктор резюме для практикумов по Soft Skills с экспортом в JPG для Cloudflare Pages",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "build": "echo 'Static build ready'"
+  },
+  "keywords": [
+    "soft-skills",
+    "resume-builder",
+    "cv-generator",
+    "cloudflare-pages"
+  ],
+  "author": "",
+  "license": "MIT"
+}

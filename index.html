@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Надпрофессиональные компетенции современного специалиста | Конструктор Резюме</title>
+  <meta name="description" content="Конструктор резюме для дисциплины 'Надпрофессиональные компетенции современного специалиста'. Заполните данные и скачайте эстетичное резюме в формате JPG в один клик.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="html2canvas.min.js"></script>
+</head>
+<body>
+  <!-- Header / Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand">
+        <div class="brand-badge">Дисциплина</div>
+        <h1 class="brand-title">Надпрофессиональные компетенции современного специалиста</h1>
+      </div>
+      <div class="header-actions">
+        <button type="button" id="btn-load-demo" class="btn btn-outline" title="Заполнить форму готовым образцом">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+          Пример резюме
+        </button>
+        <button type="button" id="btn-clear-all" class="btn btn-ghost" title="Очистить все поля">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+          Сброс
+        </button>
+        <button type="button" id="btn-download-jpg" class="btn btn-primary" title="Скачать готовое резюме как качественную картинку JPG">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          <span class="btn-text">Скачать JPG (1 клик)</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Intro Bar -->
+  <section class="intro-bar">
+    <div class="intro-container">
+      <div class="intro-text">
+        <span class="pill-tag">🎯 Практическое занятие</span>
+        <h2>Создай резюме, которое подчеркивает твои ключевые Soft Skills</h2>
+        <p>Заполни блоки ниже: система автоматически отформатирует твои гибкие навыки, достижения и опыт в презентабельный макет. Данные обрабатываются в браузере и не сохраняются на серверах.</p>
+      </div>
+      <div class="intro-features">
+        <div class="feature-item">
+          <div class="feature-icon">✨</div>
+          <div class="feature-desc"><strong>Эстетичный дизайн:</strong> стильное типографическое оформление по швейцарским канонам</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">🧠</div>
+          <div class="feature-desc"><strong>Фокус на SoftSkills:</strong> готовая база сильных формулировок и подсказок</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">⚡️</div>
+          <div class="feature-desc"><strong>Скачивание в 1 клик:</strong> четкая картинка JPG высокого разрешения (A4)</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mobile View Switcher (Tabs) -->
+  <div class="mobile-tabs">
+    <button class="mobile-tab-btn active" data-tab="editor">✏️ Редактор данных</button>
+    <button class="mobile-tab-btn" data-tab="preview">👁 Предпросмотр резюме</button>
+  </div>
+
+  <!-- Main Application Workspace -->
+  <main class="workspace-container">
+    <!-- LEFT COLUMN: Forms & Customization -->
+    <div class="editor-pane active" id="editor-pane">
+      
+      <!-- Theme & Customization Settings -->
+      <div class="card settings-card">
+        <div class="card-header">
+          <span class="step-num">🎨</span>
+          <div>
+            <h3>Стиль и цветовая палитра</h3>
+            <p class="subtitle">Выберите подходящую цветовую гамму для вашего резюме</p>
+          </div>
+        </div>
+        <div class="theme-picker">
+          <label class="theme-option">
+            <input type="radio" name="resume-theme" value="theme-navy" checked>
+            <span class="theme-swatch navy"></span>
+            <span class="theme-name">Executive Navy</span>
+          </label>
+          <label class="theme-option">
+            <input type="radio" name="resume-theme" value="theme-emerald">
+            <span class="theme-swatch emerald"></span>
+            <span class="theme-name">Emerald Leader</span>
+          </label>
+          <label class="theme-option">
+            <input type="radio" name="resume-theme" value="theme-terracotta">
+            <span class="theme-swatch terracotta"></span>
+            <span class="theme-name">Warm Editorial</span>
+          </label>
+          <label class="theme-option">
+            <input type="radio" name="resume-theme" value="theme-monochrome">
+            <span class="theme-swatch monochrome"></span>
+            <span class="theme-name">Nordic Minimal</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- SECTION 1: Personal Info & Contacts -->
+      <div class="card form-section">
+        <div class="card-header">
+          <span class="step-num">1</span>
+          <div>
+            <h3>Контакты и информация о себе</h3>
+            <p class="subtitle">Базовая информация для связи и первое впечатление</p>
+          </div>
+        </div>
+
+        <div class="photo-upload-wrapper">
+          <div class="photo-preview-box" id="photo-preview-container">
+            <img id="avatar-preview-img" src="" alt="Фото профиля" class="hidden">
+            <div id="avatar-placeholder" class="avatar-placeholder">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+              <span>Загрузить фото</span>
+            </div>
+          </div>
+          <div class="photo-upload-actions">
+            <label for="input-photo" class="btn btn-sm btn-outline file-label">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+              Выбрать снимок
+            </label>
+            <input type="file" id="input-photo" accept="image/*" class="sr-only">
+            <button type="button" id="btn-remove-photo" class="btn btn-sm btn-ghost hidden">Удалить</button>
+            <span class="upload-hint">JPG, PNG или WEBP (рекомендуется портретная ориентация)</span>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="input-group">
+            <label for="field-fullname">Имя и Фамилия <span class="req">*</span></label>
+            <input type="text" id="field-fullname" placeholder="Например: Анна Смирнова" value="Анна Смирнова">
+          </div>
+          <div class="input-group">
+            <label for="field-title">Желаемая должность / Роль <span class="req">*</span></label>
+            <input type="text" id="field-title" placeholder="Например: Product Lead / Менеджер проектов" value="Product Lead / Team Manager">
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="input-group">
+            <label for="field-email">Электронная почта</label>
+            <input type="email" id="field-email" placeholder="name@domain.com" value="anna.smirnova@example.com">
+          </div>
+          <div class="input-group">
+            <label for="field-phone">Телефон / Мессенджер</label>
+            <input type="tel" id="field-phone" placeholder="+7 (999) 000-00-00" value="+7 (999) 123-45-67">
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="input-group">
+            <label for="field-telegram">Telegram</label>
+            <input type="text" id="field-telegram" placeholder="@username" value="@anna_lead">
+          </div>
+          <div class="input-group">
+            <label for="field-location">Город / Формат работы</label>
+            <input type="text" id="field-location" placeholder="Москва • Удаленно / Гибрид" value="Москва • Удаленно / Офис">
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="field-portfolio">Ссылка на портфолио / LinkedIn / Сайт</label>
+          <input type="text" id="field-portfolio" placeholder="https://linkedin.com/in/... или сайт" value="linkedin.com/in/anna-smirnova">
+        </div>
+
+        <div class="input-group">
+          <div class="label-with-tip">
+            <label for="field-summary">О себе и профессиональное кредо</label>
+            <span class="tip-badge" title="Кратко опишите ваш фокус, принципы работы и подход к людям">Совет тренера</span>
+          </div>
+          <textarea id="field-summary" rows="3" placeholder="Краткое позиционирование: какие ценности приносите команде, как решаете задачи через коммуникацию..."></textarea>
+        </div>
+      </div>
+
+      <!-- SECTION 2: Experience (Опыт работы) -->
+      <div class="card form-section">
+        <div class="card-header justify-between">
+          <div class="flex-align">
+            <span class="step-num">2</span>
+            <div>
+              <h3>Опыт работы</h3>
+              <p class="subtitle">Ваш профессиональный путь с акцентом на роль и результаты</p>
+            </div>
+          </div>
+          <button type="button" id="btn-add-experience" class="btn btn-sm btn-outline">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            Добавить место работы
+          </button>
+        </div>
+
+        <div id="experience-list" class="dynamic-list">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+
+      <!-- SECTION 3: Education (Образование) -->
+      <div class="card form-section">
+        <div class="card-header justify-between">
+          <div class="flex-align">
+            <span class="step-num">3</span>
+            <div>
+              <h3>Образование</h3>
+              <p class="subtitle">Высшее или профильное образование</p>
+            </div>
+          </div>
+          <button type="button" id="btn-add-education" class="btn btn-sm btn-outline">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            Добавить образование
+          </button>
+        </div>
+
+        <div id="education-list" class="dynamic-list">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+
+      <!-- SECTION 4: Soft Skills (Гибкие навыки) -->
+      <div class="card form-section highlight-section">
+        <div class="card-header">
+          <span class="step-num star">4</span>
+          <div>
+            <h3>Гибкие навыки (Soft Skills)</h3>
+            <p class="subtitle">Ключевой блок нашего практикума. Выберите из библиотеки или впишите свои</p>
+          </div>
+        </div>
+
+        <div class="quick-skills-box">
+          <span class="quick-title">Быстрое добавление (нажмите, чтобы добавить в резюме):</span>
+          <div class="preset-chips" id="soft-skills-presets">
+            <button type="button" class="preset-chip" data-skill="Эмоциональный интеллект">+ Эмоциональный интеллект</button>
+            <button type="button" class="preset-chip" data-skill="Ассертивная коммуникация">+ Ассертивная коммуникация</button>
+            <button type="button" class="preset-chip" data-skill="Критическое мышление">+ Критическое мышление</button>
+            <button type="button" class="preset-chip" data-skill="Управление конфликтами">+ Управление конфликтами</button>
+            <button type="button" class="preset-chip" data-skill="Фасилитация и модерация">+ Фасилитация и модерация</button>
+            <button type="button" class="preset-chip" data-skill="Кросс-функциональное лидерство">+ Кросс-функциональное лидерство</button>
+            <button type="button" class="preset-chip" data-skill="Адаптивность к изменениям">+ Адаптивность к изменениям</button>
+            <button type="button" class="preset-chip" data-skill="Наставничество и менторинг">+ Наставничество и менторинг</button>
+            <button type="button" class="preset-chip" data-skill="Принятие решений в неопределенности">+ Принятие решений</button>
+            <button type="button" class="preset-chip" data-skill="Тайм-менеджмент и фокус">+ Тайм-менеджмент</button>
+            <button type="button" class="preset-chip" data-skill="Сторителлинг и питчинг">+ Сторителлинг</button>
+            <button type="button" class="preset-chip" data-skill="Переговоры win-win">+ Переговоры win-win</button>
+          </div>
+        </div>
+
+        <div class="input-with-button">
+          <input type="text" id="input-new-softskill" placeholder="Или введите свой навык (нажмите Enter или Добавить)">
+          <button type="button" id="btn-add-softskill" class="btn btn-secondary">Добавить</button>
+        </div>
+
+        <div class="active-tags-container" id="soft-skills-tags">
+          <!-- Tags will render here -->
+        </div>
+      </div>
+
+      <!-- SECTION 5: Hard Skills (Жесткие навыки по специальностям) -->
+      <div class="card form-section">
+        <div class="card-header">
+          <span class="step-num">5</span>
+          <div>
+            <h3>Жесткие навыки (Hard Skills)</h3>
+            <p class="subtitle">Выберите вашу специальность, чтобы увидеть профессиональные навыки, или впишите свои</p>
+          </div>
+        </div>
+
+        <div class="input-group" style="margin-bottom: 1rem;">
+          <label for="select-specialty">Специальность / Направление обучения <span class="req">*</span></label>
+          <select id="select-specialty" class="select-specialty">
+            <option value="" disabled selected>— Выберите вашу специальность —</option>
+            <option value="law">1. Юристы</option>
+            <option value="fire_safety">2. Пожарная безопасность</option>
+            <option value="disaster_protection">3. Защита в ЧС</option>
+            <option value="law_enforcement">4. Правоохранительная деятельность</option>
+            <option value="mechanics">5. Механики</option>
+            <option value="electricians">6. Электрики</option>
+            <option value="automation_operators">7. Операторы АСУ</option>
+            <option value="dispatchers_emergency">8. Диспетчера (ЧС)</option>
+          </select>
+        </div>
+
+        <div class="quick-skills-box">
+          <div class="quick-title-row">
+            <span class="quick-title" id="hard-skills-box-title">Готовые навыки по специальности:</span>
+            <span class="specialty-indicator" id="current-specialty-badge">Специальность не выбрана</span>
+          </div>
+          <div class="preset-chips" id="hard-skills-presets">
+            <p class="select-prompt">👆 Выберите специальность выше, чтобы открыть список профессиональных навыков</p>
+          </div>
+        </div>
+
+        <div class="input-with-button">
+          <input type="text" id="input-new-hardskill" placeholder="Или введите свой навык/инструмент (Enter)">
+          <button type="button" id="btn-add-hardskill" class="btn btn-secondary">Добавить</button>
+        </div>
+
+        <div class="active-tags-container" id="hard-skills-tags">
+          <!-- Tags will render here -->
+        </div>
+      </div>
+
+      <!-- SECTION 6: Achievements (Достижения) -->
+      <div class="card form-section">
+        <div class="card-header justify-between">
+          <div class="flex-align">
+            <span class="step-num">6</span>
+            <div>
+              <h3>Достижения и оцифрованные результаты</h3>
+              <p class="subtitle">Факты, метрики и результаты, подтверждающие ваш уровень</p>
+            </div>
+          </div>
+          <button type="button" id="btn-add-achievement" class="btn btn-sm btn-outline">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            Добавить достижение
+          </button>
+        </div>
+
+        <div class="tip-banner">
+          <span class="tip-icon">💡</span>
+          <span><strong>Формула сильного достижения:</strong> [Что сделали] + [Благодаря какому навыку] + [Оцифрованный результат в % или цифрах].</span>
+        </div>
+
+        <div id="achievement-list" class="dynamic-list">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+
+      <!-- SECTION 7: Extra (Languages & Courses) -->
+      <div class="card form-section">
+        <div class="card-header">
+          <span class="step-num">7</span>
+          <div>
+            <h3>Дополнительно: Языки и Сертификаты</h3>
+            <p class="subtitle">Владение иностранными языками и профильные курсы</p>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div>
+            <div class="label-with-tip">
+              <label>Иностранные языки</label>
+              <button type="button" id="btn-add-language" class="btn-text-link">+ Добавить</button>
+            </div>
+            <div id="language-list" class="dynamic-list compact">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+          <div>
+            <div class="label-with-tip">
+              <label>Курсы и тренинги</label>
+              <button type="button" id="btn-add-course" class="btn-text-link">+ Добавить</button>
+            </div>
+            <div id="course-list" class="dynamic-list compact">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT COLUMN: Live Interactive Resume Preview & Export -->
+    <div class="preview-pane" id="preview-pane">
+      <div class="preview-sticky-toolbar">
+        <div class="preview-status">
+          <span class="status-dot"></span>
+          <span>Живой предпросмотр (A4)</span>
+        </div>
+        <div class="preview-actions">
+          <button type="button" id="btn-print-resume" class="btn btn-sm btn-ghost" title="Печать или PDF">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+            Печать
+          </button>
+          <button type="button" id="btn-download-jpg-preview" class="btn btn-sm btn-primary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            Скачать JPG
+          </button>
+        </div>
+      </div>
+
+      <div class="preview-scroll-wrapper">
+        <!-- The actual Resume A4 Document that gets converted to high-DPI JPG -->
+        <div class="resume-sheet-container">
+          <div id="resume-canvas-target" class="resume-sheet theme-navy">
+            
+            <!-- RESUME HEADER / TOP STRIP -->
+            <header class="resume-header">
+              <div class="resume-header-main">
+                <div class="resume-avatar-holder" id="resume-avatar-holder">
+                  <img id="resume-avatar-img" src="" alt="Фото" class="hidden">
+                  <div id="resume-avatar-fallback" class="resume-avatar-fallback">АС</div>
+                </div>
+                <div class="resume-title-block">
+                  <h1 class="resume-name" id="cv-name">Анна Смирнова</h1>
+                  <p class="resume-role" id="cv-title">Product Lead / Team Manager</p>
+                  <p class="resume-bio" id="cv-summary">Опытный руководитель с фокусом на развитии кросс-функциональных команд, эмоциональном интеллекте и создании доверительной среды. Помогаю бизнесу достигать кратного роста через вовлечение людей и прозрачные процессы.</p>
+                </div>
+              </div>
+            </header>
+
+            <!-- RESUME TWO-COLUMN BODY -->
+            <div class="resume-body">
+              
+              <!-- LEFT COLUMN (Sidebar): Contacts, Soft Skills, Hard Skills, Education, Languages -->
+              <aside class="resume-sidebar">
+                
+                <!-- CONTACTS -->
+                <div class="resume-section">
+                  <h3 class="resume-sec-title">Контакты</h3>
+                  <ul class="resume-contacts-list">
+                    <li id="cv-email-row" class="contact-item">
+                      <span class="contact-icon">✉️</span>
+                      <span id="cv-email">anna.smirnova@example.com</span>
+                    </li>
+                    <li id="cv-phone-row" class="contact-item">
+                      <span class="contact-icon">📞</span>
+                      <span id="cv-phone">+7 (999) 123-45-67</span>
+                    </li>
+                    <li id="cv-telegram-row" class="contact-item">
+                      <span class="contact-icon">💬</span>
+                      <span id="cv-telegram">@anna_lead</span>
+                    </li>
+                    <li id="cv-location-row" class="contact-item">
+                      <span class="contact-icon">📍</span>
+                      <span id="cv-location">Москва • Удаленно / Офис</span>
+                    </li>
+                    <li id="cv-portfolio-row" class="contact-item">
+                      <span class="contact-icon">🔗</span>
+                      <span id="cv-portfolio">linkedin.com/in/anna-smirnova</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <!-- SOFT SKILLS (Main Accent) -->
+                <div class="resume-section">
+                  <h3 class="resume-sec-title">
+                    <span class="accent-bullet">★</span> Гибкие навыки
+                  </h3>
+                  <div class="resume-skills-cloud soft-skills-cloud" id="cv-soft-skills">
+                    <!-- Populated by JS -->
+                  </div>
+                </div>
+
+                <!-- HARD SKILLS -->
+                <div class="resume-section">
+                  <h3 class="resume-sec-title">Жесткие навыки</h3>
+                  <div class="resume-skills-cloud hard-skills-cloud" id="cv-hard-skills">
+                    <!-- Populated by JS -->
+                  </div>
+                </div>
+
+                <!-- EDUCATION -->
+                <div class="resume-section" id="cv-education-section">
+                  <h3 class="resume-sec-title">Образование</h3>
+                  <div class="resume-edu-list" id="cv-education-list">
+                    <!-- Populated by JS -->
+                  </div>
+                </div>
+
+                <!-- LANGUAGES -->
+                <div class="resume-section" id="cv-languages-section">
+                  <h3 class="resume-sec-title">Языки</h3>
+                  <ul class="resume-lang-list" id="cv-languages-list">
+                    <!-- Populated by JS -->
+                  </ul>
+                </div>
+
+              </aside>
+
+              <!-- RIGHT MAIN COLUMN: Experience, Achievements, Courses -->
+              <section class="resume-main">
+                
+                <!-- EXPERIENCE -->
+                <div class="resume-section" id="cv-experience-section">
+                  <h3 class="resume-sec-title main-title">Опыт работы</h3>
+                  <div class="resume-timeline" id="cv-experience-list">
+                    <!-- Populated by JS -->
+                  </div>
+                </div>
+
+                <!-- ACHIEVEMENTS -->
+                <div class="resume-section" id="cv-achievements-section">
+                  <h3 class="resume-sec-title main-title">Ключевые достижения</h3>
+                  <ul class="resume-achievements-list" id="cv-achievements-list">
+                    <!-- Populated by JS -->
+                  </ul>
+                </div>
+
+                <!-- COURSES / CERTIFICATIONS -->
+                <div class="resume-section" id="cv-courses-section">
+                  <h3 class="resume-sec-title main-title">Курсы и тренинги</h3>
+                  <ul class="resume-courses-list" id="cv-courses-list">
+                    <!-- Populated by JS -->
+                  </ul>
+                </div>
+
+              </section>
+
+            </div>
+
+            <!-- RESUME FOOTER (Discreet) -->
+            <footer class="resume-footer-stamp">
+              <span>Надпрофессиональные компетенции современного специалиста</span>
+              <span>•</span>
+              <span id="cv-current-date">Октябрь 2026</span>
+            </footer>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Download Progress Overlay Modal -->
+  <div class="modal-backdrop hidden" id="download-modal">
+    <div class="modal-card">
+      <div class="spinner"></div>
+      <h3 id="modal-title">Генерация резюме в высоком качестве...</h3>
+      <p id="modal-desc">Рендерим картинку JPG с идеальной четкостью шрифтов (A4). Файл скачается автоматически через секунду.</p>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast" class="toast hidden"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

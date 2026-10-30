@@ -1075,6 +1075,49 @@
         btn.addEventListener('click', handleDownloadJpg);
       }
     });
+
+    // 15. QR Code Modal Actions
+    const qrModal = document.getElementById('qr-modal');
+    const btnShowQr = document.getElementById('btn-show-qr');
+    const btnCloseQr = document.getElementById('btn-close-qr');
+    const btnCopyQrLink = document.getElementById('btn-copy-qr-link');
+
+    if (btnShowQr && qrModal) {
+      btnShowQr.addEventListener('click', () => {
+        qrModal.classList.remove('hidden');
+      });
+    }
+
+    if (btnCloseQr && qrModal) {
+      btnCloseQr.addEventListener('click', () => {
+        qrModal.classList.add('hidden');
+      });
+    }
+
+    if (qrModal) {
+      qrModal.addEventListener('click', (e) => {
+        if (e.target === qrModal) {
+          qrModal.classList.add('hidden');
+        }
+      });
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && qrModal && !qrModal.classList.contains('hidden')) {
+        qrModal.classList.add('hidden');
+      }
+    });
+
+    if (btnCopyQrLink) {
+      btnCopyQrLink.addEventListener('click', () => {
+        const link = 'https://goo.su/nG2sP';
+        navigator.clipboard.writeText(link).then(() => {
+          showToast('✓ Ссылка скопирована в буфер обмена!');
+        }).catch(() => {
+          showToast('Ссылка: ' + link);
+        });
+      });
+    }
   }
 
   // --- JPG EXPORT ENGINE ---

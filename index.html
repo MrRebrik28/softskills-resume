@@ -36,16 +36,10 @@
     </div>
   </header>
 
-  <!-- Mobile View Switcher (Tabs) -->
-  <div class="mobile-tabs">
-    <button class="mobile-tab-btn active" data-tab="editor">✏️ Редактор данных</button>
-    <button class="mobile-tab-btn" data-tab="preview">👁 Предпросмотр резюме</button>
-  </div>
-
   <!-- Main Application Workspace -->
   <main class="workspace-container">
     <!-- LEFT COLUMN: Forms & Customization -->
-    <div class="editor-pane active" id="editor-pane">
+    <div class="editor-pane" id="editor-pane">
       
       <!-- Theme & Customization Settings -->
       <div class="card settings-card">
@@ -337,6 +331,23 @@
               <!-- Dynamically populated -->
             </div>
           </div>
+        </div>
+      </div>
+
+      <!-- BOTTOM DOWNLOAD ACTION CARD -->
+      <div class="card download-card-bottom">
+        <div class="download-cta-inner">
+          <div class="download-cta-info">
+            <span class="status-dot"></span>
+            <div>
+              <strong>Резюме готово к выгрузке</strong>
+              <p class="subtitle">Скачайте эстетичное резюме формата A4 в формате JPG в один клик</p>
+            </div>
+          </div>
+          <button type="button" id="btn-download-jpg-bottom" class="btn btn-primary btn-lg-download">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            <span>Скачать резюме JPG (1 клик)</span>
+          </button>
         </div>
       </div>
 

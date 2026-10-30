@@ -8,6 +8,7 @@
 
   // --- DEFAULT DEMO DATA TEMPLATE ---
   const DEFAULT_DEMO_DATA = {
+    isDemo: true,
     theme: 'theme-navy',
     photoUrl: '',
     selectedSpecialty: 'disaster_protection',
@@ -123,6 +124,11 @@
           Object.assign(state, parsed);
           if (parsed.personal) {
             state.personal = Object.assign({}, DEFAULT_DEMO_DATA.personal, parsed.personal);
+          }
+          if (parsed.isDemo !== undefined) {
+            state.isDemo = parsed.isDemo;
+          } else {
+            state.isDemo = (parsed.personal && parsed.personal.fullname === DEFAULT_DEMO_DATA.personal.fullname);
           }
           return true;
         }
@@ -434,17 +440,61 @@
       .replace(/'/g, '&#039;');
   }
 
+  // Personal Field Map
+  const PERSONAL_FIELD_MAP = {
+    'field-fullname': 'fullname',
+    'field-title': 'title',
+    'field-email': 'email',
+    'field-phone': 'phone',
+    'field-telegram': 'telegram',
+    'field-location': 'location',
+    'field-portfolio': 'portfolio',
+    'field-summary': 'summary'
+  };
+
+  // Helper: Auto-clear demo data when user starts typing or customising
+  function checkAndClearDemo(triggerFieldId = null, triggerValue = null) {
+    if (!state.isDemo) return;
+    state.isDemo = false;
+    state.photoUrl = '';
+    state.selectedSpecialty = '';
+    state.personal = {
+      fullname: '',
+      title: '',
+      email: '',
+      phone: '',
+      telegram: '',
+      location: '',
+      portfolio: '',
+      summary: ''
+    };
+    if (triggerFieldId && PERSONAL_FIELD_MAP[triggerFieldId]) {
+      state.personal[PERSONAL_FIELD_MAP[triggerFieldId]] = triggerValue || '';
+    } else if (triggerFieldId === 'select-specialty') {
+      state.selectedSpecialty = triggerValue || '';
+    }
+    state.experiences = [];
+    state.education = [];
+    state.softSkills = [];
+    state.hardSkills = [];
+    state.achievements = [];
+    state.languages = [];
+    state.courses = [];
+
+    renderAllForms(triggerFieldId);
+    updatePreview();
+    showToast('✨ Пример очищен. Заполняйте свои данные!');
+  }
+
   // --- RENDER FORMS IN LEFT COLUMN ---
-  function renderAllForms() {
-    // Inputs
-    document.getElementById('field-fullname').value = state.personal.fullname;
-    document.getElementById('field-title').value = state.personal.title;
-    document.getElementById('field-email').value = state.personal.email;
-    document.getElementById('field-phone').value = state.personal.phone;
-    document.getElementById('field-telegram').value = state.personal.telegram;
-    document.getElementById('field-location').value = state.personal.location;
-    document.getElementById('field-portfolio').value = state.personal.portfolio;
-    document.getElementById('field-summary').value = state.personal.summary;
+  function renderAllForms(skipFieldId = null) {
+    // Personal Inputs
+    Object.keys(PERSONAL_FIELD_MAP).forEach(id => {
+      if (id !== skipFieldId) {
+        const el = document.getElementById(id);
+        if (el) el.value = state.personal[PERSONAL_FIELD_MAP[id]] || '';
+      }
+    });
 
     // Avatar preview in form
     renderFormAvatar();
@@ -637,23 +687,21 @@
   // --- EVENT LISTENERS & BINDINGS ---
   function initEvents() {
     // 1. Personal Inputs
-    const fieldMap = {
-      'field-fullname': 'fullname',
-      'field-title': 'title',
-      'field-email': 'email',
-      'field-phone': 'phone',
-      'field-telegram': 'telegram',
-      'field-location': 'location',
-      'field-portfolio': 'portfolio',
-      'field-summary': 'summary'
-    };
-
-    Object.keys(fieldMap).forEach(id => {
+    Object.keys(PERSONAL_FIELD_MAP).forEach(id => {
       const el = document.getElementById(id);
       if (el) {
+        el.addEventListener('focus', (e) => {
+          if (state.isDemo && e.target.value) {
+            e.target.select();
+          }
+        });
         el.addEventListener('input', (e) => {
-          state.personal[fieldMap[id]] = e.target.value;
-          updatePreview();
+          if (state.isDemo) {
+            checkAndClearDemo(id, e.target.value);
+          } else {
+            state.personal[PERSONAL_FIELD_MAP[id]] = e.target.value;
+            updatePreview();
+          }
         });
       }
     });
@@ -667,6 +715,9 @@
           if (file.size > 12 * 1024 * 1024) {
             alert('Пожалуйста, выберите изображение размером до 12 МБ.');
             return;
+          }
+          if (state.isDemo) {
+            checkAndClearDemo();
           }
           const reader = new FileReader();
           reader.onload = (event) => {
@@ -727,10 +778,15 @@
         const btn = e.target.closest('.preset-chip');
         if (btn) {
           const skill = btn.getAttribute('data-skill');
-          if (skill && !state.softSkills.includes(skill)) {
-            state.softSkills.push(skill);
-            renderSoftSkillsTags();
-            updatePreview();
+          if (skill) {
+            if (state.isDemo) {
+              checkAndClearDemo();
+            }
+            if (!state.softSkills.includes(skill)) {
+              state.softSkills.push(skill);
+              renderSoftSkillsTags();
+              updatePreview();
+            }
           }
         }
       });
@@ -740,11 +796,16 @@
     const btnAddSoft = document.getElementById('btn-add-softskill');
     function addCustomSoftSkill() {
       const val = inputNewSoft.value.trim();
-      if (val && !state.softSkills.includes(val)) {
-        state.softSkills.push(val);
-        inputNewSoft.value = '';
-        renderSoftSkillsTags();
-        updatePreview();
+      if (val) {
+        if (state.isDemo) {
+          checkAndClearDemo();
+        }
+        if (!state.softSkills.includes(val)) {
+          state.softSkills.push(val);
+          inputNewSoft.value = '';
+          renderSoftSkillsTags();
+          updatePreview();
+        }
       }
     }
     if (btnAddSoft) btnAddSoft.addEventListener('click', addCustomSoftSkill);
@@ -775,9 +836,13 @@
     const selectSpecialty = document.getElementById('select-specialty');
     if (selectSpecialty) {
       selectSpecialty.addEventListener('change', (e) => {
-        state.selectedSpecialty = e.target.value;
-        renderHardSkillsPresets();
-        updatePreview();
+        if (state.isDemo) {
+          checkAndClearDemo('select-specialty', e.target.value);
+        } else {
+          state.selectedSpecialty = e.target.value;
+          renderHardSkillsPresets();
+          updatePreview();
+        }
         if (SPECIALTIES_DATA[state.selectedSpecialty]) {
           showToast(`Выбрано направление: ${SPECIALTIES_DATA[state.selectedSpecialty].name}`);
         }
@@ -790,10 +855,15 @@
         const btn = e.target.closest('.preset-chip');
         if (btn) {
           const skill = btn.getAttribute('data-skill');
-          if (skill && !state.hardSkills.includes(skill)) {
-            state.hardSkills.push(skill);
-            renderHardSkillsTags();
-            updatePreview();
+          if (skill) {
+            if (state.isDemo) {
+              checkAndClearDemo();
+            }
+            if (!state.hardSkills.includes(skill)) {
+              state.hardSkills.push(skill);
+              renderHardSkillsTags();
+              updatePreview();
+            }
           }
         }
       });
@@ -803,11 +873,16 @@
     const btnAddHard = document.getElementById('btn-add-hardskill');
     function addCustomHardSkill() {
       const val = inputNewHard.value.trim();
-      if (val && !state.hardSkills.includes(val)) {
-        state.hardSkills.push(val);
-        inputNewHard.value = '';
-        renderHardSkillsTags();
-        updatePreview();
+      if (val) {
+        if (state.isDemo) {
+          checkAndClearDemo();
+        }
+        if (!state.hardSkills.includes(val)) {
+          state.hardSkills.push(val);
+          inputNewHard.value = '';
+          renderHardSkillsTags();
+          updatePreview();
+        }
       }
     }
     if (btnAddHard) btnAddHard.addEventListener('click', addCustomHardSkill);
@@ -836,6 +911,9 @@
 
     // 6. Experience dynamic list
     document.getElementById('btn-add-experience').addEventListener('click', () => {
+      if (state.isDemo) {
+        checkAndClearDemo();
+      }
       state.experiences.push({
         id: 'exp-' + Date.now(),
         title: '',
@@ -874,6 +952,9 @@
 
     // 7. Education dynamic list
     document.getElementById('btn-add-education').addEventListener('click', () => {
+      if (state.isDemo) {
+        checkAndClearDemo();
+      }
       state.education.push({
         id: 'edu-' + Date.now(),
         degree: '',
@@ -910,6 +991,9 @@
 
     // 8. Achievements dynamic list
     document.getElementById('btn-add-achievement').addEventListener('click', () => {
+      if (state.isDemo) {
+        checkAndClearDemo();
+      }
       state.achievements.push('');
       renderAchievementsForm();
       updatePreview();
@@ -937,6 +1021,9 @@
 
     // 9. Languages
     document.getElementById('btn-add-language').addEventListener('click', () => {
+      if (state.isDemo) {
+        checkAndClearDemo();
+      }
       state.languages.push({
         id: 'lang-' + Date.now(),
         name: '',
@@ -971,6 +1058,9 @@
 
     // 10. Courses
     document.getElementById('btn-add-course').addEventListener('click', () => {
+      if (state.isDemo) {
+        checkAndClearDemo();
+      }
       state.courses.push({
         id: 'crs-' + Date.now(),
         text: ''
@@ -1005,6 +1095,7 @@
     document.getElementById('btn-clear-all').addEventListener('click', () => {
       if (confirm('Вы уверены, что хотите очистить форму? Все текущие данные будут сброшены.')) {
         applyState({
+          isDemo: false,
           theme: 'theme-navy',
           photoUrl: '',
           selectedSpecialty: '',
@@ -1034,29 +1125,10 @@
 
     document.getElementById('btn-load-demo').addEventListener('click', () => {
       applyState(DEFAULT_DEMO_DATA);
+      state.isDemo = true;
       renderAllForms();
       updatePreview();
       showToast('Загружен образец резюме для дисциплины');
-    });
-
-    // 12. Mobile Tab Switcher
-    const tabBtns = document.querySelectorAll('.mobile-tab-btn');
-    const editorPane = document.getElementById('editor-pane');
-    const previewPane = document.getElementById('preview-pane');
-
-    tabBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        tabBtns.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        const tab = btn.getAttribute('data-tab');
-        if (tab === 'editor') {
-          editorPane.classList.add('active');
-          previewPane.classList.remove('active');
-        } else {
-          editorPane.classList.remove('active');
-          previewPane.classList.add('active');
-        }
-      });
     });
 
     // 13. Print Action
@@ -1067,7 +1139,8 @@
     // 14. Download JPG Action (1 Click)
     const downloadBtns = [
       document.getElementById('btn-download-jpg'),
-      document.getElementById('btn-download-jpg-preview')
+      document.getElementById('btn-download-jpg-preview'),
+      document.getElementById('btn-download-jpg-bottom')
     ];
 
     downloadBtns.forEach(btn => {
@@ -1143,11 +1216,23 @@
         backgroundColor: '#ffffff',
         logging: false,
         windowWidth: 1200, // ensure desktop layout is captured
+        scrollX: 0,
+        scrollY: 0,
         onclone: (clonedDoc) => {
-          // Guarantee cloned resume sheet has standard desktop width
+          // Guarantee cloned resume sheet has standard desktop width and full visibility in clone
+          const clonedPane = clonedDoc.querySelector('.preview-pane');
+          if (clonedPane) {
+            clonedPane.style.position = 'static';
+            clonedPane.style.left = '0';
+            clonedPane.style.opacity = '1';
+            clonedPane.style.display = 'block';
+            clonedPane.style.width = '794px';
+          }
           const clonedResume = clonedDoc.getElementById('resume-canvas-target');
           if (clonedResume) {
             clonedResume.style.width = '794px';
+            clonedResume.style.minWidth = '794px';
+            clonedResume.style.maxWidth = '794px';
             clonedResume.style.boxShadow = 'none';
           }
         }

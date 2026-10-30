@@ -6,8 +6,8 @@
 (function () {
   'use strict';
 
-  // --- STATE MANAGEMENT ---
-  const state = {
+  // --- DEFAULT DEMO DATA TEMPLATE ---
+  const DEFAULT_DEMO_DATA = {
     theme: 'theme-navy',
     photoUrl: '',
     selectedSpecialty: 'disaster_protection',
@@ -76,6 +76,67 @@
       { id: 'crs-2', text: 'Сертификация по ликвидации медико-санитарных последствий ЧС (2025)' }
     ]
   };
+
+  // --- LOCAL PERSISTENCE & AUTO-SAVE ENGINE ---
+  const STORAGE_KEY = 'softskills_resume_data_v1';
+  let saveDebounceTimer = null;
+
+  // Active state initialized as a deep copy of template
+  const state = JSON.parse(JSON.stringify(DEFAULT_DEMO_DATA));
+
+  function updateSaveIndicator(text, isSaving = false) {
+    const el = document.getElementById('save-status-text');
+    const dot = document.getElementById('save-status-dot');
+    if (el) el.textContent = text;
+    if (dot) {
+      if (isSaving) {
+        dot.style.background = '#f59e0b';
+        dot.style.boxShadow = '0 0 0 2px rgba(245, 158, 11, 0.25)';
+      } else {
+        dot.style.background = 'var(--success)';
+        dot.style.boxShadow = '0 0 0 2px rgba(16, 185, 129, 0.2)';
+      }
+    }
+  }
+
+  function saveStateToStorage() {
+    updateSaveIndicator('Сохранение...', true);
+    if (saveDebounceTimer) clearTimeout(saveDebounceTimer);
+    saveDebounceTimer = setTimeout(() => {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        updateSaveIndicator('Сохранено локально', false);
+      } catch (err) {
+        console.warn('Не удалось сохранить в localStorage:', err);
+        updateSaveIndicator('Память заполнена', false);
+      }
+    }, 250);
+  }
+
+  function loadStateFromStorage() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed && typeof parsed === 'object') {
+          // Deep merge into state
+          Object.assign(state, parsed);
+          if (parsed.personal) {
+            state.personal = Object.assign({}, DEFAULT_DEMO_DATA.personal, parsed.personal);
+          }
+          return true;
+        }
+      }
+    } catch (err) {
+      console.warn('Ошибка чтения из localStorage:', err);
+    }
+    return false;
+  }
+
+  function applyState(newState) {
+    Object.keys(state).forEach(key => delete state[key]);
+    Object.assign(state, JSON.parse(JSON.stringify(newState)));
+  }
 
   // --- SPECIALTIES HARD SKILLS DICTIONARY ---
   const SPECIALTIES_DATA = {
@@ -346,6 +407,9 @@
     const now = new Date();
     const months = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
     document.getElementById('cv-current-date').textContent = `${months[now.getMonth()]} ${now.getFullYear()}`;
+
+    // Auto-save state to localStorage
+    saveStateToStorage();
   }
 
   function updateContactRow(textId, rowId, value) {
@@ -594,22 +658,43 @@
       }
     });
 
-    // 2. Photo Upload
+    // 2. Photo Upload with Auto-Optimization for Local Storage
     const inputPhoto = document.getElementById('input-photo');
     if (inputPhoto) {
       inputPhoto.addEventListener('change', (e) => {
         const file = e.target.files[0];
         if (file) {
-          if (file.size > 8 * 1024 * 1024) {
-            alert('Пожалуйста, выберите изображение размером до 8 МБ.');
+          if (file.size > 12 * 1024 * 1024) {
+            alert('Пожалуйста, выберите изображение размером до 12 МБ.');
             return;
           }
           const reader = new FileReader();
           reader.onload = (event) => {
-            state.photoUrl = event.target.result;
-            renderFormAvatar();
-            updatePreview();
-            showToast('Фотография загружена');
+            const img = new Image();
+            img.onload = () => {
+              const maxDim = 450;
+              let width = img.width;
+              let height = img.height;
+              if (width > maxDim || height > maxDim) {
+                if (width > height) {
+                  height = Math.round((height * maxDim) / width);
+                  width = maxDim;
+                } else {
+                  width = Math.round((width * maxDim) / height);
+                  height = maxDim;
+                }
+              }
+              const canvas = document.createElement('canvas');
+              canvas.width = width;
+              canvas.height = height;
+              const ctx = canvas.getContext('2d');
+              ctx.drawImage(img, 0, 0, width, height);
+              state.photoUrl = canvas.toDataURL('image/jpeg', 0.88);
+              renderFormAvatar();
+              updatePreview();
+              showToast('Фотография сохранена');
+            };
+            img.src = event.target.result;
           };
           reader.readAsDataURL(file);
         }
@@ -692,6 +777,7 @@
       selectSpecialty.addEventListener('change', (e) => {
         state.selectedSpecialty = e.target.value;
         renderHardSkillsPresets();
+        updatePreview();
         if (SPECIALTIES_DATA[state.selectedSpecialty]) {
           showToast(`Выбрано направление: ${SPECIALTIES_DATA[state.selectedSpecialty].name}`);
         }
@@ -917,26 +1003,29 @@
 
     // 11. Header Actions (Reset & Demo Load)
     document.getElementById('btn-clear-all').addEventListener('click', () => {
-      if (confirm('Вы уверены, что хотите очистить форму? Все несохраненные данные будут сброшены.')) {
-        state.photoUrl = '';
-        state.selectedSpecialty = '';
-        state.personal = {
-          fullname: '',
-          title: '',
-          email: '',
-          phone: '',
-          telegram: '',
-          location: '',
-          portfolio: '',
-          summary: ''
-        };
-        state.experiences = [];
-        state.education = [];
-        state.softSkills = [];
-        state.hardSkills = [];
-        state.achievements = [];
-        state.languages = [];
-        state.courses = [];
+      if (confirm('Вы уверены, что хотите очистить форму? Все текущие данные будут сброшены.')) {
+        applyState({
+          theme: 'theme-navy',
+          photoUrl: '',
+          selectedSpecialty: '',
+          personal: {
+            fullname: '',
+            title: '',
+            email: '',
+            phone: '',
+            telegram: '',
+            location: '',
+            portfolio: '',
+            summary: ''
+          },
+          experiences: [],
+          education: [],
+          softSkills: [],
+          hardSkills: [],
+          achievements: [],
+          languages: [],
+          courses: []
+        });
         renderAllForms();
         updatePreview();
         showToast('Форма полностью очищена');
@@ -944,73 +1033,7 @@
     });
 
     document.getElementById('btn-load-demo').addEventListener('click', () => {
-      state.theme = 'theme-navy';
-      state.photoUrl = '';
-      state.selectedSpecialty = 'disaster_protection';
-      state.personal = {
-        fullname: 'Дмитрий Соколов',
-        title: 'Специалист по защите в ЧС / Руководитель спасательной группы',
-        email: 'sokolov.mchs@example.com',
-        phone: '+7 (926) 777-33-44',
-        telegram: '@sokolov_rescue',
-        location: 'Москва • Готов к командировкам',
-        portfolio: 'linkedin.com/in/dmitry-sokolov',
-        summary: 'Специалист по защите в чрезвычайных ситуациях с развитыми надпрофессиональными компетенциями: лидерство в стрессовых условиях, оперативная координация команды, хладнокровие и принятие взвешенных решений в условиях дефицита времени.'
-      };
-      state.experiences = [
-        {
-          id: 'exp-demo-1',
-          title: 'Командир отделения аварийно-спасательной группы',
-          company: 'Центр гражданской защиты и спасательных операций',
-          period: '2023 — Наст. время',
-          description: '• Руководство расчетом из 6 спасателей при проведении АСР повышенной сложности.\n• Внедрил алгоритмы бесконфликтной оперативной коммуникации по радиосвязи в зоне ЧС.\n• Провел успешную эвакуацию более 80 человек при ликвидации последствий паводка.'
-        },
-        {
-          id: 'exp-demo-2',
-          title: 'Спасатель 2-го класса',
-          company: 'Поисково-спасательный отряд',
-          period: '2021 — 2023',
-          description: '• Проведение поисково-спасательных работ в природной и техногенной среде.\n• Оказание первой доврачебной помощи и психологической поддержки пострадавшим.\n• Менторство и полевая адаптация 5 молодых стажеров-спасателей.'
-        }
-      ];
-      state.education = [
-        {
-          id: 'edu-demo-1',
-          degree: 'Защита в чрезвычайных ситуациях (Техник-спасатель)',
-          school: 'Технический пожарно-спасательный колледж',
-          period: '2019 — 2023'
-        }
-      ];
-      state.softSkills = [
-        'Эмоциональный интеллект',
-        'Принятие решений в неопределенности',
-        'Управление конфликтами',
-        'Критическое мышление',
-        'Кросс-функциональное лидерство',
-        'Ассертивная коммуникация',
-        'Адаптивность к изменениям',
-        'Наставничество и менторинг'
-      ];
-      state.hardSkills = [
-        'Проведение аварийно-спасательных работ (АСР)',
-        'Оказание первой помощи пострадавшим при ЧС',
-        'Эксплуатация аварийно-спасательного инструмента (ГАСИ)',
-        'Радиационная и химическая разведка (ВПХР, ДП-5)',
-        'Топография, картография и радиосвязь'
-      ];
-      state.achievements = [
-        'Награжден ведомственным знаком отличия за спасение людей и предотвращение техногенной аварии.',
-        'Сократил время развертывания гидравлического аварийно-спасательного инструмента (ГАСИ) на 25% благодаря оптимизации командных ролей.',
-        'Провел более 15 открытых уроков и практических тренировок по действиям в ЧС для студентов и школьников.'
-      ];
-      state.languages = [
-        { id: 'lang-d-1', name: 'Русский', level: 'Родной' },
-        { id: 'lang-d-2', name: 'Английский', level: 'B1 (Intermediate)' }
-      ];
-      state.courses = [
-        { id: 'crs-d-1', text: 'Курс: «Надпрофессиональные компетенции современного специалиста» (2026)' },
-        { id: 'crs-d-2', text: 'Сертификация по ликвидации медико-санитарных последствий ЧС (2025)' }
-      ];
+      applyState(DEFAULT_DEMO_DATA);
       renderAllForms();
       updatePreview();
       showToast('Загружен образец резюме для дисциплины');
@@ -1113,6 +1136,15 @@
 
   // --- INITIALIZATION ---
   document.addEventListener('DOMContentLoaded', () => {
+    // 1. Restore state from localStorage if available
+    const restored = loadStateFromStorage();
+    if (restored) {
+      updateSaveIndicator('Восстановлено из памяти браузера', false);
+    } else {
+      updateSaveIndicator('Сохранено локально', false);
+    }
+
+    // 2. Render all views and bind events
     renderAllForms();
     updatePreview();
     initEvents();

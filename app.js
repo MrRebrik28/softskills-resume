@@ -264,6 +264,12 @@
   const resumeCanvas = document.getElementById('resume-canvas-target');
   const downloadModal = document.getElementById('download-modal');
   const toastEl = document.getElementById('toast');
+  const iosSaveModal = document.getElementById('ios-save-modal');
+  const iosResultImg = document.getElementById('ios-result-img');
+  const btnIosShare = document.getElementById('btn-ios-share');
+  const btnIosDownloadFiles = document.getElementById('btn-ios-download-files');
+  const btnIosOpenTab = document.getElementById('btn-ios-open-tab');
+  const btnCloseIosModal = document.getElementById('btn-close-ios-modal');
 
   // Helper: Show Toast
   function showToast(message, duration = 3000) {
@@ -273,6 +279,85 @@
     setTimeout(() => {
       toastEl.classList.add('hidden');
     }, duration);
+  }
+
+  // Helper: iOS device detection (iPhone, iPad, iPod, iPadOS Safari)
+  function isIOSDevice() {
+    return (
+      /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
+    );
+  }
+
+  // Helper: Convert Canvas to Blob with robust fallback
+  function canvasToBlob(canvas, type = 'image/jpeg', quality = 0.95) {
+    return new Promise((resolve, reject) => {
+      try {
+        canvas.toBlob(blob => {
+          if (blob) {
+            resolve(blob);
+          } else {
+            try {
+              const dataUrl = canvas.toDataURL(type, quality);
+              const byteString = atob(dataUrl.split(',')[1]);
+              const mimeString = dataUrl.split(',')[0].split(':')[1].split(';')[0];
+              const ab = new ArrayBuffer(byteString.length);
+              const ia = new Uint8Array(ab);
+              for (let i = 0; i < byteString.length; i++) {
+                ia[i] = byteString.charCodeAt(i);
+              }
+              resolve(new Blob([ab], { type: mimeString }));
+            } catch (fallbackErr) {
+              reject(fallbackErr);
+            }
+          }
+        }, type, quality);
+      } catch (err) {
+        reject(err);
+      }
+    });
+  }
+
+  // Helper: Trigger browser file download from Blob URL
+  function triggerBlobDownload(blobUrl, filename) {
+    const link = document.createElement('a');
+    link.href = blobUrl;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  // Current export storage
+  let currentExportBlob = null;
+  let currentExportBlobUrl = null;
+  let currentExportFile = null;
+  let currentExportFilename = 'Резюме.jpg';
+
+  function openIosSaveModal() {
+    if (!iosSaveModal) return;
+    if (iosResultImg && currentExportBlobUrl) {
+      iosResultImg.src = currentExportBlobUrl;
+    }
+    iosSaveModal.classList.remove('hidden');
+
+    // Attempt direct native share if Web Share API is available
+    if (navigator.canShare && currentExportFile) {
+      try {
+        if (navigator.canShare({ files: [currentExportFile] })) {
+          navigator.share({
+            files: [currentExportFile],
+            title: currentExportFilename
+          }).then(() => {
+            showToast('✓ Готово! Выберите «Сохранить изображение»');
+          }).catch(err => {
+            console.log('Direct share dismissed or not allowed:', err);
+          });
+        }
+      } catch (e) {
+        console.log('Share error:', e);
+      }
+    }
   }
 
   // Helper: Initials generator for fallback avatar
@@ -1176,8 +1261,13 @@
     }
 
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && qrModal && !qrModal.classList.contains('hidden')) {
-        qrModal.classList.add('hidden');
+      if (e.key === 'Escape') {
+        if (qrModal && !qrModal.classList.contains('hidden')) {
+          qrModal.classList.add('hidden');
+        }
+        if (iosSaveModal && !iosSaveModal.classList.contains('hidden')) {
+          iosSaveModal.classList.add('hidden');
+        }
       }
     });
 
@@ -1189,6 +1279,71 @@
         }).catch(() => {
           showToast('Ссылка: ' + link);
         });
+      });
+    }
+
+    // 16. iOS Save Modal Actions
+    if (btnIosShare) {
+      btnIosShare.addEventListener('click', async () => {
+        if (navigator.canShare && currentExportFile) {
+          try {
+            if (navigator.canShare({ files: [currentExportFile] })) {
+              await navigator.share({
+                files: [currentExportFile],
+                title: currentExportFilename
+              });
+              showToast('✓ Резюме сохранено!');
+              return;
+            }
+          } catch (err) {
+            if (err.name === 'AbortError') return;
+            console.warn('Share error:', err);
+          }
+        }
+        // Fallback: open in new tab
+        if (currentExportBlobUrl) {
+          window.open(currentExportBlobUrl, '_blank');
+          showToast('Зажмите картинку и выберите «Сохранить в Фото»');
+        }
+      });
+    }
+
+    if (btnIosDownloadFiles) {
+      btnIosDownloadFiles.addEventListener('click', () => {
+        if (currentExportBlobUrl) {
+          triggerBlobDownload(currentExportBlobUrl, currentExportFilename);
+          showToast('Файл отправлен в приложение «Файлы» (Загрузки)');
+        }
+      });
+    }
+
+    if (btnIosOpenTab) {
+      btnIosOpenTab.addEventListener('click', () => {
+        if (currentExportBlobUrl) {
+          window.open(currentExportBlobUrl, '_blank');
+        }
+      });
+    }
+
+    if (btnCloseIosModal && iosSaveModal) {
+      btnCloseIosModal.addEventListener('click', () => {
+        iosSaveModal.classList.add('hidden');
+      });
+    }
+
+    if (iosSaveModal) {
+      iosSaveModal.addEventListener('click', (e) => {
+        if (e.target === iosSaveModal) {
+          iosSaveModal.classList.add('hidden');
+        }
+      });
+    }
+
+    if (iosResultImg) {
+      iosResultImg.addEventListener('click', () => {
+        if (currentExportBlobUrl) {
+          window.open(currentExportBlobUrl, '_blank');
+        }
       });
     }
   }
@@ -1238,23 +1393,35 @@
         }
       });
 
-      // Export as JPG (quality 0.95 for stunning fidelity)
-      const jpgDataUrl = canvas.toDataURL('image/jpeg', 0.95);
+      // Export as high-quality JPEG Blob (much more reliable across iOS/WebKit than huge data URLs)
+      const blob = await canvasToBlob(canvas, 'image/jpeg', 0.95);
 
-      // Create download trigger
+      if (currentExportBlobUrl) {
+        URL.revokeObjectURL(currentExportBlobUrl);
+      }
+
+      currentExportBlob = blob;
+      currentExportBlobUrl = URL.createObjectURL(blob);
+
       const cleanName = (state.personal.fullname || 'SoftSkills-Resume')
         .replace(/[^a-zA-Zа-яА-Я0-9_-]/g, '_');
-      const filename = `Резюме_${cleanName}.jpg`;
+      currentExportFilename = `Резюме_${cleanName}.jpg`;
 
-      const link = document.createElement('a');
-      link.href = jpgDataUrl;
-      link.download = filename;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      try {
+        currentExportFile = new File([blob], currentExportFilename, { type: 'image/jpeg' });
+      } catch (e) {
+        currentExportFile = blob;
+      }
 
       downloadModal.classList.add('hidden');
-      showToast('🎉 Резюме успешно сохранено в JPG!');
+
+      if (isIOSDevice()) {
+        openIosSaveModal();
+      } else {
+        // Desktop & Android: direct browser download
+        triggerBlobDownload(currentExportBlobUrl, currentExportFilename);
+        showToast('🎉 Резюме успешно сохранено в JPG!');
+      }
     } catch (err) {
       console.error('Ошибка экспорта JPG:', err);
       downloadModal.classList.add('hidden');

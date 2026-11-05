@@ -341,7 +341,7 @@
             <span class="status-dot"></span>
             <div>
               <strong>Резюме готово к выгрузке</strong>
-              <p class="subtitle">Скачайте эстетичное резюме формата A4 в формате JPG в один клик</p>
+              <p class="subtitle">Скачайте эстетичное резюме формата A4 в формате JPG в один клик <span class="ios-hint-badge">📱 На iPhone — сохранение в Галерею через «Поделиться»</span></p>
             </div>
           </div>
           <button type="button" id="btn-download-jpg-bottom" class="btn btn-primary btn-lg-download">
@@ -552,6 +552,72 @@
       <div class="spinner"></div>
       <h3 id="modal-title">Генерация резюме в высоком качестве...</h3>
       <p id="modal-desc">Рендерим картинку JPG с идеальной четкостью шрифтов (A4). Файл скачается автоматически через секунду.</p>
+    </div>
+  </div>
+
+  <!-- iOS / Mobile Save Guide Modal -->
+  <div class="modal-backdrop hidden" id="ios-save-modal" role="dialog" aria-modal="true">
+    <div class="modal-card ios-save-modal-card">
+      <button type="button" class="modal-close-btn" id="btn-close-ios-modal" title="Закрыть (Esc)">&times;</button>
+      
+      <div class="ios-modal-header">
+        <span class="pill-tag">📱 Сохранение на iPhone / iPad</span>
+        <h3>Резюме готово к сохранению!</h3>
+        <p class="subtitle">Как сохранить картинку в Галерею («Фото»):</p>
+      </div>
+
+      <div class="ios-info-callout">
+        <div class="callout-icon">💡</div>
+        <div class="callout-text">
+          <strong>Куда попадают файлы на iOS?</strong>
+          <p>Браузер на iPhone по умолчанию скачивает файлы в приложение <strong>«Файлы» (папка «Загрузки»)</strong>, поэтому в «Фото» они сразу не видны.</p>
+          <p>Чтобы резюме появилось в вашей <strong>Галерее («Фото»)</strong>, выберите один из двух способов:</p>
+        </div>
+      </div>
+
+      <!-- Method 1: Share sheet -->
+      <div class="ios-method-box">
+        <div class="method-header">
+          <span class="step-num">1</span>
+          <div>
+            <strong>Основной способ (в Галерею):</strong>
+            <span class="method-sub">Нажмите кнопку и выберите «Сохранить изображение»</span>
+          </div>
+        </div>
+        <button type="button" id="btn-ios-share" class="btn btn-primary btn-ios-share">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
+          <span>Сохранить в Фото / Поделиться</span>
+        </button>
+      </div>
+
+      <!-- Method 2: Long press image -->
+      <div class="ios-method-box">
+        <div class="method-header">
+          <span class="step-num">2</span>
+          <div>
+            <strong>Или сохраните прямо с экрана:</strong>
+            <span class="method-sub">Зажмите картинку пальцем на 1–2 секунды</span>
+          </div>
+        </div>
+        <div class="ios-img-container">
+          <img id="ios-result-img" alt="Готовое резюме" class="ios-result-img" />
+          <div class="ios-img-tip-bar">
+            <span>👆 Зажмите картинку → выберите «Сохранить в Фото»</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Secondary Actions: Files app & New Tab -->
+      <div class="ios-secondary-actions">
+        <button type="button" id="btn-ios-download-files" class="btn btn-outline" title="Скачать как файл">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          <span>Скачать в «Файлы»</span>
+        </button>
+        <button type="button" id="btn-ios-open-tab" class="btn btn-outline" title="Открыть в новой вкладке">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+          <span>Открыть на весь экран</span>
+        </button>
+      </div>
     </div>
   </div>
 

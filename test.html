@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Тестирование по Soft Skills | Надпрофессиональные компетенции современного специалиста</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Shared Styles & Test Specific Styles -->
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="test.css">
+</head>
+<body class="test-body">
+
+  <!-- Navigation Bar -->
+  <header class="test-navbar">
+    <div class="test-navbar-inner">
+      <a href="index.html" class="test-brand">
+        <div class="test-brand-logo">НK</div>
+        <div>
+          <span class="test-brand-title">Надпрофессиональные компетенции</span>
+          <span class="test-brand-sub">Аттестационное тестирование студентов</span>
+        </div>
+      </a>
+      <a href="index.html" class="btn btn-outline btn-nav-back" title="Вернуться к созданию резюме">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+        <span>Конструктор резюме</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="test-main-container">
+
+    <!-- =========================================================================
+         SCREEN 1: REGISTRATION & RULES
+         ========================================================================= -->
+    <section id="screen-registration" class="test-card">
+      <div class="test-hero">
+        <span class="test-hero-badge">🎓 Контрольное тестирование</span>
+        <h1>Тестирование по Soft Skills</h1>
+        <p>Проверка усвоения ключевых надпрофессиональных компетенций по темам: <strong>Командная работа</strong>, <strong>Резюме и самопрезентация</strong>, <strong>Лидерство и влияние</strong>, <strong>Модель 4К</strong>.</p>
+      </div>
+
+      <!-- Rules Cards -->
+      <div class="rules-grid">
+        <div class="rule-box">
+          <div class="rule-icon">⏱️</div>
+          <div class="rule-content">
+            <strong>15 минут на решение</strong>
+            <p>Таймер запустится сразу после нажатия кнопки старта. По истечении 15 минут ответы отправятся автоматически.</p>
+          </div>
+        </div>
+
+        <div class="rule-box strict">
+          <div class="rule-icon">🚫</div>
+          <div class="rule-content">
+            <strong>Переход в другие вкладки ЗАПРЕЩЕН</strong>
+            <p>Система античита фиксирует сворачивание окна или переключение вкладок. После 3 нарушений результат аннулируется!</p>
+          </div>
+        </div>
+
+        <div class="rule-box">
+          <div class="rule-icon">📋</div>
+          <div class="rule-content">
+            <strong>24 вопроса с выбором ответа</strong>
+            <p>В каждом вопросе ровно один правильный ответ. Вы можете переключаться между вопросами в любой момент.</p>
+          </div>
+        </div>
+
+        <div class="rule-box">
+          <div class="rule-icon">🏆</div>
+          <div class="rule-content">
+            <strong>Официальный протокол с оценкой</strong>
+            <p>По завершении формируется именная карточка с баллом, процентом и анализом ответов, которую можно скачать в JPG.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Student Registration Form -->
+      <div class="reg-form-card">
+        <h2 class="reg-form-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+          Данные студента для протокола
+        </h2>
+
+        <div class="form-row-2">
+          <div class="input-group">
+            <label for="student-lastname">Фамилия <span style="color:#ef4444;">*</span></label>
+            <input type="text" id="student-lastname" placeholder="Например: Иванов" autocomplete="family-name" required>
+          </div>
+          <div class="input-group">
+            <label for="student-firstname">Имя <span style="color:#ef4444;">*</span></label>
+            <input type="text" id="student-firstname" placeholder="Например: Иван" autocomplete="given-name" required>
+          </div>
+        </div>
+
+        <div class="form-row-2">
+          <div class="input-group">
+            <label for="student-group">Учебная группа <span style="color:#ef4444;">*</span></label>
+            <input type="text" id="student-group" placeholder="Например: ПБ-21, ЮР-11, ЧС-31" required>
+          </div>
+          <div class="input-group">
+            <label for="student-specialty">Специальность / Направление</label>
+            <select id="student-specialty">
+              <option value="Пожарная безопасность">Пожарная безопасность</option>
+              <option value="Защита в ЧС">Защита в ЧС</option>
+              <option value="Юристы">Юристы</option>
+              <option value="Правоохранительная деятельность">Правоохранительная деятельность</option>
+              <option value="Операторы АСУ">Операторы АСУ</option>
+              <option value="Диспетчера (ЧС)">Диспетчера (ЧС)</option>
+              <option value="Электрики">Электрики</option>
+              <option value="Механики">Механики</option>
+            </select>
+          </div>
+        </div>
+
+        <button type="button" id="btn-start-test" class="btn btn-primary btn-start-test">
+          <span>Начать тестирование</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </button>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         SCREEN 2: QUIZ ARENA (Active Test)
+         ========================================================================= -->
+    <section id="screen-quiz" class="hidden">
+      <!-- Sticky Header -->
+      <div class="quiz-sticky-header">
+        <div class="quiz-student-badge">
+          <div class="quiz-student-avatar">🎓</div>
+          <span id="bar-student-info">Студент</span>
+        </div>
+
+        <div class="quiz-stats-group">
+          <span id="bar-violations" class="violation-badge ok">Нарушений: 0 / 3</span>
+          <div id="bar-timer" class="timer-pill">⏱ 15:00</div>
+        </div>
+
+        <!-- Progress bar across entire top -->
+        <div class="quiz-progress-track">
+          <div id="bar-progress-bar" class="quiz-progress-bar" style="width: 4%;"></div>
+        </div>
+      </div>
+
+      <!-- Main Question Card -->
+      <div class="test-card">
+        <div class="question-card-inner">
+          <div class="question-meta-row">
+            <span id="quiz-topic-tag" class="topic-tag">Командная работа</span>
+            <span id="quiz-counter-badge" class="question-counter-badge">Вопрос 1 из 24</span>
+          </div>
+
+          <h2 id="quiz-question-title" class="question-text">Загрузка вопроса...</h2>
+
+          <!-- Options Container -->
+          <div id="quiz-options-container" class="options-list">
+            <!-- Populated dynamically -->
+          </div>
+
+          <!-- Bottom Navigation Row -->
+          <div class="quiz-nav-row">
+            <div class="quiz-nav-buttons">
+              <button type="button" id="btn-prev-question" class="btn btn-outline" disabled>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                <span>Назад</span>
+              </button>
+              <button type="button" id="btn-next-question" class="btn btn-primary">
+                <span>Далее</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </button>
+            </div>
+
+            <button type="button" id="btn-finish-quiz" class="btn btn-finish-quiz">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>Завершить тест</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Question Palitra (Quick Navigation Map) -->
+      <div class="quiz-map-card">
+        <div class="quiz-map-header">
+          <span>Быстрая навигация по вопросам:</span>
+          <span id="bar-progress-text">Вопрос 1 из 24</span>
+        </div>
+        <div id="quiz-map-grid" class="quiz-map-grid">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         SCREEN 3: RESULTS & PROTOCOL
+         ========================================================================= -->
+    <section id="screen-results" class="hidden">
+      <div class="results-card-inner">
+
+        <!-- Printable / Capturable Certificate Box -->
+        <div id="certificate-card-target" class="certificate-sheet">
+          <div class="cert-header">
+            <div class="cert-logo-row">
+              <div class="cert-logo-icon">НК</div>
+              <span class="cert-discipline">Надпрофессиональные компетенции современного специалиста</span>
+            </div>
+            <h1 class="cert-title">Протокол аттестационного тестирования</h1>
+            <p class="cert-sub">Командная работа • Резюме и самопрезентация • Лидерство • Модель 4К</p>
+          </div>
+
+          <!-- Student Info Grid -->
+          <div class="cert-student-box">
+            <div class="cert-info-item">
+              <span class="label">Студент (ФИО)</span>
+              <span id="cert-student-name" class="val">—</span>
+            </div>
+            <div class="cert-info-item">
+              <span class="label">Учебная группа</span>
+              <span id="cert-student-group" class="val">—</span>
+            </div>
+            <div class="cert-info-item">
+              <span class="label">Специальность</span>
+              <span id="cert-student-specialty" class="val">—</span>
+            </div>
+            <div class="cert-info-item">
+              <span class="label">Время решения</span>
+              <span id="cert-time-spent" class="val">—</span>
+            </div>
+          </div>
+
+          <!-- Big Score Banner -->
+          <div id="cert-score-banner" class="cert-score-grid grade-5">
+            <div class="cert-grade-col">
+              <div id="cert-grade-num" class="cert-grade-num">5</div>
+              <div id="cert-grade-text" class="cert-grade-text">Отлично</div>
+            </div>
+            <div class="cert-stats-col">
+              <div class="cert-stat-row">
+                <span class="stat-label">Правильных ответов:</span>
+                <span id="cert-score-points" class="stat-value">24 из 24</span>
+              </div>
+              <div class="cert-stat-row">
+                <span class="stat-label">Процент выполнения:</span>
+                <span id="cert-score-percent" class="stat-value">100%</span>
+              </div>
+              <div class="cert-stat-row">
+                <span class="stat-label">Контроль вкладок (античит):</span>
+                <span id="cert-anticheat-status" class="stat-value">Соблюдено (0 нарушений)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topics Progress Breakdown -->
+          <div class="cert-topics-box">
+            <div class="cert-topics-title">Результаты по тематическим модулям:</div>
+            <div id="cert-topics-list">
+              <!-- Populated dynamically -->
+            </div>
+          </div>
+
+          <!-- Certificate Footer Stamp -->
+          <div class="cert-footer-stamp">
+            <span class="cert-verification-badge">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              Электронная верификация прохождения теста
+            </span>
+            <span>Дата прохождения: <strong id="cert-date">—</strong></span>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="cert-actions-row">
+          <button type="button" id="btn-download-cert-jpg" class="btn btn-primary btn-cert-download">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            <span>Скачать протокол (JPG)</span>
+          </button>
+          <button type="button" id="btn-print-cert" class="btn btn-outline">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+            <span>Печать / PDF</span>
+          </button>
+          <button type="button" id="btn-retake-test" class="btn btn-outline">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+            <span>Пройти заново</span>
+          </button>
+          <a href="index.html" class="btn btn-outline">
+            <span>В конструктор резюме</span>
+          </a>
+        </div>
+
+        <!-- Detailed Review of All Questions -->
+        <div class="review-section">
+          <h2 class="review-section-title">Подробный разбор ответов:</h2>
+          <div id="review-questions-list">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =========================================================================
+       MODALS
+       ========================================================================= -->
+
+  <!-- Anti-Cheat Violation Warning Modal -->
+  <div class="modal-backdrop hidden" id="anticheat-modal" role="dialog" aria-modal="true">
+    <div class="modal-card anticheat-modal-card">
+      <div class="anticheat-icon-pulse">🚨</div>
+      <h3 class="anticheat-title">Нарушение правил тестирования!</h3>
+      <p id="anticheat-msg" class="anticheat-desc">Зафиксирован уход с вкладки или сворачивание окна. Переходить на другие вкладки во время тестирования СТРОГО ЗАПРЕЩЕНО!</p>
+      <div id="anticheat-count-text" class="anticheat-counter-box">Предупреждение 1 из 3</div>
+      <button type="button" id="btn-anticheat-ack" class="btn btn-anticheat-ack">Я понял, вернуться к тесту</button>
+    </div>
+  </div>
+
+  <!-- Confirm Finish Early Modal -->
+  <div class="modal-backdrop hidden" id="confirm-finish-modal" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <h3>Завершить тестирование?</h3>
+      <p id="confirm-finish-msg">Вы уверены, что хотите завершить тест?</p>
+      <div style="display: flex; gap: 0.75rem; width: 100%; margin-top: 0.5rem;">
+        <button type="button" id="btn-cancel-finish" class="btn btn-outline" style="flex:1;">Продолжить тест</button>
+        <button type="button" id="btn-proceed-finish" class="btn btn-primary" style="flex:1;">Да, завершить</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- iOS Save Certificate Modal -->
+  <div class="modal-backdrop hidden" id="cert-ios-modal" role="dialog" aria-modal="true">
+    <div class="modal-card ios-save-modal-card">
+      <button type="button" class="modal-close-btn" id="btn-close-cert-ios" title="Закрыть (Esc)">&times;</button>
+      <div class="ios-modal-header">
+        <span class="pill-tag">📱 Сохранение на iPhone / iPad</span>
+        <h3>Протокол готов!</h3>
+        <p class="subtitle">Сохраните карточку результата в Фото («Галерею»):</p>
+      </div>
+
+      <div class="ios-info-callout">
+        <div class="callout-icon">💡</div>
+        <div class="callout-text">
+          <p>Нажмите <strong>«Сохранить в Фото / Поделиться»</strong> и выберите пункт <em>«Сохранить изображение»</em>.</p>
+        </div>
+      </div>
+
+      <button type="button" id="btn-cert-ios-share" class="btn btn-primary btn-ios-share">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
+        <span>Сохранить в Фото / Поделиться</span>
+      </button>
+
+      <div class="ios-img-container" style="margin-top: 1rem;">
+        <img id="cert-ios-img" alt="Карточка результата" class="ios-result-img" />
+        <div class="ios-img-tip-bar">
+          <span>👆 Или зажмите картинку пальцем → выберите «Сохранить в Фото»</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast hidden"></div>
+
+  <!-- Scripts -->
+  <script src="html2canvas.min.js"></script>
+  <script src="test.js"></script>
+</body>
+</html>

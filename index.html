@@ -136,17 +136,51 @@
           </div>
         </div>
 
-        <div class="input-group">
-          <label for="field-portfolio">Ссылка на портфолио / LinkedIn / Сайт</label>
-          <input type="text" id="field-portfolio" placeholder="https://linkedin.com/in/... или сайт" value="linkedin.com/in/anna-smirnova">
+        <div class="grid-2">
+          <div class="input-group">
+            <label for="field-portfolio">Ссылка на портфолио / LinkedIn / GitHub</label>
+            <input type="text" id="field-portfolio" placeholder="https://linkedin.com/in/... или сайт" value="linkedin.com/in/anna-smirnova">
+          </div>
+          <div class="input-group">
+            <label for="field-salary">Ожидаемый доход (по желанию)</label>
+            <input type="text" id="field-salary" placeholder="Например: от 75 000 ₽ или По договоренности" value="">
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="input-group">
+            <label for="field-format">Занятость и график</label>
+            <select id="field-format">
+              <option value="Полная занятость">Полная занятость</option>
+              <option value="Стажировка / Начало карьеры">Стажировка / Начало карьеры</option>
+              <option value="Частичная занятость">Частичная занятость</option>
+              <option value="Сменный график">Сменный график</option>
+              <option value="Проектная работа">Проектная работа</option>
+              <option value="Вахтовый метод">Вахтовый метод</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label for="field-readiness">Готовность и допуски (для HR)</label>
+            <input type="text" id="field-readiness" placeholder="Например: Командировки, права кат. B" value="">
+          </div>
+        </div>
+
+        <div class="quick-skills-box" style="margin-bottom: 1rem;">
+          <span class="quick-title" style="margin-bottom: 0.45rem;">Быстрые отметки для HR (нажмите, чтобы добавить):</span>
+          <div class="preset-chips" id="hr-readiness-presets">
+            <button type="button" class="preset-chip" data-readiness="Готов к командировкам">+ Командировки</button>
+            <button type="button" class="preset-chip" data-readiness="Готов к переезду">+ Переезд</button>
+            <button type="button" class="preset-chip" data-readiness="Водительские права кат. B">+ Права кат. B</button>
+            <button type="button" class="preset-chip" data-readiness="Действующая медкнижка">+ Медкнижка</button>
+          </div>
         </div>
 
         <div class="input-group">
           <div class="label-with-tip">
             <label for="field-summary">О себе и профессиональное кредо</label>
-            <span class="tip-badge" title="Кратко опишите ваш фокус, принципы работы и подход к людям">Совет тренера</span>
+            <span class="tip-badge" title="Кратко опишите ваш фокус, принципы работы и подход к людям">Совет HR: 2–4 предложения</span>
           </div>
-          <textarea id="field-summary" rows="3" placeholder="Краткое позиционирование: какие ценности приносите команде, как решаете задачи через коммуникацию..."></textarea>
+          <textarea id="field-summary" rows="3" placeholder="Краткое позиционирование: какие задачи решаете, чем сильны и какую ценность приносите команде..."></textarea>
         </div>
       </div>
 
@@ -372,13 +406,26 @@
         </div>
       </div>
 
+      <!-- HR Readiness Checklist Bar -->
+      <div class="hr-readiness-bar" id="hr-readiness-bar">
+        <div class="hr-readiness-top">
+          <span class="hr-readiness-label">📊 Проверка по стандартам HR: <strong id="hr-score-value">100%</strong></span>
+          <span class="hr-readiness-status" id="hr-score-badge">Отлично</span>
+        </div>
+        <div class="hr-progress-track">
+          <div class="hr-progress-fill" id="hr-progress-fill" style="width: 100%;"></div>
+        </div>
+        <div class="hr-readiness-tip" id="hr-readiness-tip">Все ключевые блоки заполнены — резюме готово к отправке рекрутеру!</div>
+      </div>
+
       <div class="preview-scroll-wrapper">
         <!-- The actual Resume A4 Document that gets converted to high-DPI JPG -->
         <div class="resume-sheet-container">
           <div id="resume-canvas-target" class="resume-sheet theme-navy">
             
-            <!-- RESUME HEADER / TOP STRIP -->
+            <!-- RESUME HEADER / MODERN EXECUTIVE TOP -->
             <header class="resume-header">
+              <div class="resume-header-accent"></div>
               <div class="resume-header-main">
                 <div class="resume-avatar-holder" id="resume-avatar-holder">
                   <img id="resume-avatar-img" src="" alt="Фото" class="hidden">
@@ -387,7 +434,9 @@
                 <div class="resume-title-block">
                   <h1 class="resume-name" id="cv-name">Анна Смирнова</h1>
                   <p class="resume-role" id="cv-title">Product Lead / Team Manager</p>
-                  <p class="resume-bio" id="cv-summary">Опытный руководитель с фокусом на развитии кросс-функциональных команд, эмоциональном интеллекте и создании доверительной среды. Помогаю бизнесу достигать кратного роста через вовлечение людей и прозрачные процессы.</p>
+                  <div class="resume-hr-strip" id="cv-hr-meta-strip">
+                    <!-- Populated dynamically by JS -->
+                  </div>
                 </div>
               </div>
             </header>
@@ -395,7 +444,7 @@
             <!-- RESUME TWO-COLUMN BODY -->
             <div class="resume-body">
               
-              <!-- LEFT COLUMN (Sidebar): Contacts, Soft Skills, Hard Skills, Education, Languages -->
+              <!-- LEFT COLUMN (Sidebar): Contacts, Soft Skills, Hard Skills, Languages -->
               <aside class="resume-sidebar">
                 
                 <!-- CONTACTS -->
@@ -403,30 +452,30 @@
                   <h3 class="resume-sec-title">Контакты</h3>
                   <ul class="resume-contacts-list">
                     <li id="cv-email-row" class="contact-item">
-                      <span class="contact-icon">✉️</span>
+                      <span class="contact-icon-svg"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg></span>
                       <span id="cv-email">anna.smirnova@example.com</span>
                     </li>
                     <li id="cv-phone-row" class="contact-item">
-                      <span class="contact-icon">📞</span>
+                      <span class="contact-icon-svg"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg></span>
                       <span id="cv-phone">+7 (999) 123-45-67</span>
                     </li>
                     <li id="cv-telegram-row" class="contact-item">
-                      <span class="contact-icon">💬</span>
+                      <span class="contact-icon-svg"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m22 2-7 20-4-9-9-4Z"></path><path d="M22 2 11 13"></path></svg></span>
                       <span id="cv-telegram">@anna_lead</span>
                     </li>
                     <li id="cv-location-row" class="contact-item">
-                      <span class="contact-icon">📍</span>
+                      <span class="contact-icon-svg"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg></span>
                       <span id="cv-location">Москва • Удаленно / Офис</span>
                     </li>
                     <li id="cv-portfolio-row" class="contact-item">
-                      <span class="contact-icon">🔗</span>
+                      <span class="contact-icon-svg"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></span>
                       <span id="cv-portfolio">linkedin.com/in/anna-smirnova</span>
                     </li>
                   </ul>
                 </div>
 
                 <!-- SOFT SKILLS (Main Accent) -->
-                <div class="resume-section">
+                <div class="resume-section" id="cv-soft-section">
                   <h3 class="resume-sec-title">
                     <span class="accent-bullet">★</span> Гибкие навыки
                   </h3>
@@ -436,17 +485,9 @@
                 </div>
 
                 <!-- HARD SKILLS -->
-                <div class="resume-section">
+                <div class="resume-section" id="cv-hard-section">
                   <h3 class="resume-sec-title">Жесткие навыки</h3>
                   <div class="resume-skills-cloud hard-skills-cloud" id="cv-hard-skills">
-                    <!-- Populated by JS -->
-                  </div>
-                </div>
-
-                <!-- EDUCATION -->
-                <div class="resume-section" id="cv-education-section">
-                  <h3 class="resume-sec-title">Образование</h3>
-                  <div class="resume-edu-list" id="cv-education-list">
                     <!-- Populated by JS -->
                   </div>
                 </div>
@@ -461,12 +502,18 @@
 
               </aside>
 
-              <!-- RIGHT MAIN COLUMN: Experience, Achievements, Courses -->
+              <!-- RIGHT MAIN COLUMN: Summary, Experience, Education, Achievements, Courses -->
               <section class="resume-main">
+
+                <!-- SUMMARY / ABOUT -->
+                <div class="resume-section" id="cv-summary-section">
+                  <h3 class="resume-sec-title main-title">О себе</h3>
+                  <p class="cv-summary-box" id="cv-summary"></p>
+                </div>
                 
                 <!-- EXPERIENCE -->
                 <div class="resume-section" id="cv-experience-section">
-                  <h3 class="resume-sec-title main-title">Опыт работы</h3>
+                  <h3 class="resume-sec-title main-title">Опыт работы и практика</h3>
                   <div class="resume-timeline" id="cv-experience-list">
                     <!-- Populated by JS -->
                   </div>
@@ -480,9 +527,17 @@
                   </ul>
                 </div>
 
+                <!-- EDUCATION -->
+                <div class="resume-section" id="cv-education-section">
+                  <h3 class="resume-sec-title main-title">Образование</h3>
+                  <div class="resume-edu-list" id="cv-education-list">
+                    <!-- Populated by JS -->
+                  </div>
+                </div>
+
                 <!-- COURSES / CERTIFICATIONS -->
                 <div class="resume-section" id="cv-courses-section">
-                  <h3 class="resume-sec-title main-title">Курсы и тренинги</h3>
+                  <h3 class="resume-sec-title main-title">Курсы и сертификаты</h3>
                   <ul class="resume-courses-list" id="cv-courses-list">
                     <!-- Populated by JS -->
                   </ul>

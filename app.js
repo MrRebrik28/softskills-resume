@@ -18,8 +18,11 @@
       email: 'sokolov.mchs@example.com',
       phone: '+7 (926) 777-33-44',
       telegram: '@sokolov_rescue',
-      location: 'Москва • Готов к командировкам',
+      location: 'Москва • Офис / Выездная работа',
       portfolio: 'linkedin.com/in/dmitry-sokolov',
+      salary: 'от 95 000 ₽',
+      format: 'Полная занятость',
+      readiness: 'Готов к командировкам • Права кат. B',
       summary: 'Специалист по защите в чрезвычайных ситуациях с развитыми надпрофессиональными компетенциями: лидерство в стрессовых условиях, оперативная координация команды, хладнокровие и принятие взвешенных решений в условиях неопределенности.'
     },
     experiences: [
@@ -375,10 +378,35 @@
     // 1. Theme class
     resumeCanvas.className = `resume-sheet ${state.theme}`;
 
-    // 2. Personal info
+    // 2. Personal info & HR Meta Strip
     document.getElementById('cv-name').textContent = state.personal.fullname || 'Имя Фамилия';
     document.getElementById('cv-title').textContent = state.personal.title || 'Желаемая позиция';
-    document.getElementById('cv-summary').textContent = state.personal.summary || '';
+
+    const summaryEl = document.getElementById('cv-summary');
+    const summarySec = document.getElementById('cv-summary-section');
+    if (summaryEl && summarySec) {
+      if (state.personal.summary && state.personal.summary.trim()) {
+        summaryEl.textContent = state.personal.summary.trim();
+        summarySec.classList.remove('hidden');
+      } else {
+        summarySec.classList.add('hidden');
+      }
+    }
+
+    const hrStrip = document.getElementById('cv-hr-meta-strip');
+    if (hrStrip) {
+      const pills = [];
+      if (state.personal.format && state.personal.format.trim()) {
+        pills.push(`<span class="resume-hr-pill">💼 ${escapeHtml(state.personal.format.trim())}</span>`);
+      }
+      if (state.personal.salary && state.personal.salary.trim()) {
+        pills.push(`<span class="resume-hr-pill salary">💰 ${escapeHtml(state.personal.salary.trim())}</span>`);
+      }
+      if (state.personal.readiness && state.personal.readiness.trim()) {
+        pills.push(`<span class="resume-hr-pill">✓ ${escapeHtml(state.personal.readiness.trim())}</span>`);
+      }
+      hrStrip.innerHTML = pills.join('');
+    }
 
     // Initials fallback & photo
     const avatarImg = document.getElementById('resume-avatar-img');
@@ -402,12 +430,16 @@
 
     // 4. Soft Skills
     const softContainer = document.getElementById('cv-soft-skills');
+    const softSec = document.getElementById('cv-soft-section');
+    if (softSec) softSec.classList.toggle('hidden', state.softSkills.length === 0);
     softContainer.innerHTML = state.softSkills
       .map(skill => `<span class="cv-skill-pill soft">${escapeHtml(skill)}</span>`)
       .join('');
 
     // 5. Hard Skills
     const hardContainer = document.getElementById('cv-hard-skills');
+    const hardSec = document.getElementById('cv-hard-section');
+    if (hardSec) hardSec.classList.toggle('hidden', state.hardSkills.length === 0);
     hardContainer.innerHTML = state.hardSkills
       .map(skill => `<span class="cv-skill-pill hard">${escapeHtml(skill)}</span>`)
       .join('');
@@ -442,9 +474,11 @@
       eduList.innerHTML = state.education
         .map(edu => `
           <div class="cv-edu-item">
-            <div class="cv-edu-degree">${escapeHtml(edu.degree || '')}</div>
-            <div class="cv-edu-school">${escapeHtml(edu.school || '')}</div>
-            ${edu.period ? `<div class="cv-edu-year">${escapeHtml(edu.period)}</div>` : ''}
+            <div class="cv-edu-main">
+              <div class="cv-edu-degree">${escapeHtml(edu.degree || '')}</div>
+              <div class="cv-edu-school">${escapeHtml(edu.school || '')}</div>
+            </div>
+            ${edu.period ? `<span class="cv-edu-year">${escapeHtml(edu.period)}</span>` : ''}
           </div>
         `).join('');
     }
@@ -499,8 +533,55 @@
     const months = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
     document.getElementById('cv-current-date').textContent = `${months[now.getMonth()]} ${now.getFullYear()}`;
 
+    // Update live HR Readiness Checklist
+    updateHrReadiness();
+
     // Auto-save state to localStorage
     saveStateToStorage();
+  }
+
+  function updateHrReadiness() {
+    const scoreEl = document.getElementById('hr-score-value');
+    const badgeEl = document.getElementById('hr-score-badge');
+    const fillEl = document.getElementById('hr-progress-fill');
+    const tipEl = document.getElementById('hr-readiness-tip');
+    if (!scoreEl || !badgeEl || !fillEl || !tipEl) return;
+
+    const checks = [
+      { ok: Boolean(state.personal.fullname && state.personal.title), weight: 15, tip: 'Укажите Имя, Фамилию и желаемую должность' },
+      { ok: Boolean(state.personal.email || state.personal.phone || state.personal.telegram), weight: 15, tip: 'Добавьте телефон, Email или Telegram для связи' },
+      { ok: Boolean(state.personal.summary && state.personal.summary.trim().length >= 30), weight: 15, tip: 'Заполните блок «О себе» (минимум 2–3 предложения)' },
+      { ok: state.experiences.length > 0 || state.achievements.length > 0, weight: 20, tip: 'Добавьте опыт работы/практики или достижения с цифрами' },
+      { ok: state.softSkills.length >= 3 && state.hardSkills.length >= 3, weight: 20, tip: 'Добавьте минимум 3 Soft Skills и 3 Hard Skills' },
+      { ok: state.education.length > 0, weight: 15, tip: 'Укажите учебное заведение в разделе «Образование»' }
+    ];
+
+    let total = 0;
+    const missing = [];
+    checks.forEach(c => {
+      if (c.ok) total += c.weight;
+      else missing.push(c.tip);
+    });
+
+    scoreEl.textContent = `${total}%`;
+    fillEl.style.width = `${total}%`;
+
+    badgeEl.classList.remove('warn', 'low');
+    if (total >= 85) {
+      badgeEl.textContent = 'Готово для HR';
+      fillEl.style.background = 'var(--nb-mint)';
+      tipEl.textContent = missing.length ? `Совет: ${missing[0]}` : 'Все ключевые блоки заполнены — резюме соответствует стандартам HR!';
+    } else if (total >= 50) {
+      badgeEl.textContent = 'Хорошо';
+      badgeEl.classList.add('warn');
+      fillEl.style.background = 'var(--nb-yellow)';
+      tipEl.textContent = `Улучшите резюме: ${missing[0]}`;
+    } else {
+      badgeEl.textContent = 'Нужно дополнить';
+      badgeEl.classList.add('low');
+      fillEl.style.background = 'var(--nb-coral)';
+      tipEl.textContent = `Следующий шаг: ${missing[0]}`;
+    }
   }
 
   function updateContactRow(textId, rowId, value) {
@@ -534,6 +615,9 @@
     'field-telegram': 'telegram',
     'field-location': 'location',
     'field-portfolio': 'portfolio',
+    'field-salary': 'salary',
+    'field-format': 'format',
+    'field-readiness': 'readiness',
     'field-summary': 'summary'
   };
 
@@ -551,6 +635,9 @@
       telegram: '',
       location: '',
       portfolio: '',
+      salary: '',
+      format: 'Полная занятость',
+      readiness: '',
       summary: ''
     };
     if (triggerFieldId && PERSONAL_FIELD_MAP[triggerFieldId]) {
@@ -788,8 +875,39 @@
             updatePreview();
           }
         });
+        if (el.tagName === 'SELECT') {
+          el.addEventListener('change', (e) => {
+            if (state.isDemo) {
+              checkAndClearDemo(id, e.target.value);
+            } else {
+              state.personal[PERSONAL_FIELD_MAP[id]] = e.target.value;
+              updatePreview();
+            }
+          });
+        }
       }
     });
+
+    // 1b. Quick HR Readiness Chips
+    const readinessPresets = document.getElementById('hr-readiness-presets');
+    if (readinessPresets) {
+      readinessPresets.addEventListener('click', (e) => {
+        const btn = e.target.closest('.preset-chip');
+        if (!btn) return;
+        const val = btn.getAttribute('data-readiness');
+        if (!val) return;
+        if (state.isDemo) {
+          checkAndClearDemo();
+        }
+        const current = (state.personal.readiness || '').trim();
+        if (!current.includes(val)) {
+          state.personal.readiness = current ? `${current} • ${val}` : val;
+          const inputEl = document.getElementById('field-readiness');
+          if (inputEl) inputEl.value = state.personal.readiness;
+          updatePreview();
+        }
+      });
+    }
 
     // 2. Photo Upload with Auto-Optimization for Local Storage
     const inputPhoto = document.getElementById('input-photo');
@@ -1192,6 +1310,9 @@
             telegram: '',
             location: '',
             portfolio: '',
+            salary: '',
+            format: 'Полная занятость',
+            readiness: '',
             summary: ''
           },
           experiences: [],

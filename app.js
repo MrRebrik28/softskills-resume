@@ -1483,6 +1483,7 @@
       await new Promise(resolve => setTimeout(resolve, 250));
 
       const target = document.getElementById('resume-canvas-target');
+      const fullHeight = Math.max(target.scrollHeight, target.offsetHeight, 1123);
 
       // html2canvas high-DPI configuration (scale: 2.5 gives crisp A4 image ~2000px width)
       const canvas = await html2canvas(target, {
@@ -1491,11 +1492,14 @@
         allowTaint: true,
         backgroundColor: '#ffffff',
         logging: false,
+        width: 794,
+        height: fullHeight,
         windowWidth: 1200, // ensure desktop layout is captured
+        windowHeight: fullHeight + 300,
         scrollX: 0,
         scrollY: 0,
         onclone: (clonedDoc) => {
-          // Guarantee cloned resume sheet has standard desktop width and full visibility in clone
+          // Guarantee cloned resume sheet has standard desktop width and full unclipped height
           const clonedPane = clonedDoc.querySelector('.preview-pane');
           if (clonedPane) {
             clonedPane.style.position = 'static';
@@ -1503,13 +1507,24 @@
             clonedPane.style.opacity = '1';
             clonedPane.style.display = 'block';
             clonedPane.style.width = '794px';
+            clonedPane.style.height = 'auto';
+          }
+          const clonedWrapper = clonedDoc.querySelector('.preview-scroll-wrapper');
+          if (clonedWrapper) {
+            clonedWrapper.style.maxHeight = 'none';
+            clonedWrapper.style.height = 'auto';
+            clonedWrapper.style.overflow = 'visible';
+            clonedWrapper.style.padding = '0';
           }
           const clonedResume = clonedDoc.getElementById('resume-canvas-target');
           if (clonedResume) {
             clonedResume.style.width = '794px';
             clonedResume.style.minWidth = '794px';
             clonedResume.style.maxWidth = '794px';
+            clonedResume.style.height = 'auto';
+            clonedResume.style.overflow = 'visible';
             clonedResume.style.boxShadow = 'none';
+            clonedResume.style.margin = '0';
           }
         }
       });
